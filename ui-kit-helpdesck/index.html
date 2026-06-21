@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Librería UI - Help Desk</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <main class="contenedor">
+    <header style="margin-bottom:3rem;">
+      <h1> Design System - Sistema de Incidentes</h1>
+      <p>Biblioteca de componentes reutilizables y accesibles</p>
+    </header>
+    <!-- 🔘 Botones -->
+    <section style="margin-bottom:3rem;">
+      <h2>Botones</h2>
+      <button class="btn btn--primario">Primario</button>
+      <button class="btn btn--secundario">Secundario</button>
+      <button class="btn btn--peligro">Eliminar / Peligro</button>
+    </section>
+
+    <!-- 📝 Formularios -->
+    <section style="margin-bottom:3rem;">
+      <h2>Campos de formulario</h2>
+      <div style="max-width:400px;">
+        <input type="text" class="campo-texto" placeholder="Escribe un mensaje…">
+        <br><br>
+        <select class="lista-desplegable">
+          <option>Selecciona área</option>
+          <option>Soporte técnico</option>
+          <option>Infraestructura</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- 📇 Tarjeta de ticket -->
+    <section style="margin-bottom:3rem;">
+      <h2>Tarjeta de incidente</h2>
+      <div class="tarjeta">
+        <h3 class="tarjeta__titulo">Fallo en conexión red de oficina</h3>
+        <p>Usuario: Ana Pérez | Fecha: 19/06/2026</p>
+        <p>Descripción: No hay acceso a internet en el segundo piso.</p>
+        <span class="etiqueta etiqueta--alta">Prioridad Alta</span>
+      </div>
+    </section>
+
+    <!-- 🚦 Etiquetas de prioridad -->
+    <section>
+      <h2>Etiquetas / Estados</h2>
+      <span class="etiqueta etiqueta--alta">Alta</span>
+      <span class="etiqueta etiqueta--media">Media</span>
+      <span class="etiqueta etiqueta--baja">Baja</span>
+    </section>
+  </main>
+</body>
+</html>

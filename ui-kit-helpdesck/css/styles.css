@@ -1,0 +1,102 @@
+/* ===== CONFIGURACIÓN GLOBAL Y VARIABLES ===== */
+:root {
+  /* Paleta de colores corporativa */
+  --color-primario: #165DFF;      /* principal */
+  --color-secundario: #36CFC9;    /* complementario */
+  --color-exito: #00B42A;         /* confirmaciones */
+  --color-error: #F53F3F;         /* peligro / errores */
+  --color-advertencia: #FF7D00;   /* avisos */
+  --color-texto: #1D2129;
+  --color-fondo: #F2F3F5;
+  --color-borde: #C9CDD4;
+
+  /* Tipografía */
+  --fuente-base: 'Segoe UI', Roboto, sans-serif;
+
+  /* Espaciados y bordes */
+  --radio-borde: 6px;
+  --sombra-suave: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+/* Regla obligatoria: modelo de cajas */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--fuente-base);
+  color: var(--color-texto);
+  background-color: var(--color-fondo);
+  line-height: 1.6;
+}
+/* Contenedor para centrar contenido */
+.contenedor {
+  max-width: 1100px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+/* ===== COMPONENTE: BOTONES ===== */
+.btn {
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-radius: var(--radio-borde);
+  font-family: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  min-height: 44px; /* accesibilidad WCAG */
+}
+
+.btn:hover { opacity: 0.9; }
+.btn:focus { outline: 3px solid rgba(22, 93, 255, 0.3); outline-offset: 2px; }
+
+.btn--primario    { background-color: var(--color-primario); color: #fff; }
+.btn--secundario  { background-color: var(--color-secundario); color: #fff; }
+.btn--peligro     { background-color: var(--color-error); color: #fff; }
+
+/* ===== COMPONENTE: FORMULARIOS ===== */
+.campo-texto, .lista-desplegable {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-borde);
+  font-family: inherit;
+  font-size: 1rem;
+  transition: box-shadow 0.25s ease;
+}
+
+.campo-texto:focus, .lista-desplegable:focus {
+  outline: none;
+  border-color: var(--color-primario);
+  box-shadow: 0 0 0 3px rgba(22, 93, 255, 0.2);
+}
+/* ===== COMPONENTE: TARJETA ===== */
+.tarjeta {
+  background-color: #fff;
+  padding: 1.25rem;
+  border-radius: var(--radio-borde);
+  box-shadow: var(--sombra-suave);
+  margin-bottom: 1.5rem;
+}
+
+.tarjeta__titulo {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-primario);
+}
+/* ===== COMPONENTE: ETIQUETA DE PRIORIDAD ===== */
+.etiqueta {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+.etiqueta--alta    { background-color: var(--color-error); }
+.etiqueta--media   { background-color: var(--color-advertencia); }
+.etiqueta--baja    { background-color: var(--color-exito); }
