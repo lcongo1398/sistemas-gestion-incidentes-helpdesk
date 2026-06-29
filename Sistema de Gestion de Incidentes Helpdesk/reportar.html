@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+        <!--  Vista adaptable -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Reportar Incidente - Help Desk</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Reportar Nuevo Incidente</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="reportar.html">Reportar Incidente</a></li>
+            <li><a href="tickets.html">Ver Tickets</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section>
+            <h2>Formulario de Ingreso de Incidentes</h2>
+            <form action="#" method="post">
+                <article>
+                    <label for="titulo">Título del Incidente:</label><br>
+                    <input type="text" id="titulo" name="titulo" required>
+                </article>
+
+                <article>
+                    <label for="categoria">Categoría:</label><br>
+                    <select id="categoria" name="categoria">
+                        <option value="red">Red</option>
+                        <option value="hardware">Hardware</option>
+                        <option value="software">Software</option>
+                    </select>
+                </article>
+
+                <article>
+                    <p>Prioridad:</p>
+                    <input type="radio" id="alta" name="prioridad" value="alta">
+                    <label for="alta">Alta</label><br>
+                    <input type="radio" id="media" name="prioridad" value="media">
+                    <label for="media">Media</label><br>
+                    <input type="radio" id="baja" name="prioridad" value="baja">
+                    <label for="baja">Baja</label>
+                </article>
+
+                <article>
+                    <label for="descripcion">Descripción Detallada:</label><br>
+                    <textarea id="descripcion" name="descripcion" rows="4" cols="50"></textarea>
+                </article>
+
+                <button type="submit">Enviar Reporte</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>Contacto: soporte@utm.edu.ec | Autor: Luis Congo</p>
+    </footer>
+</body>
+</html>
