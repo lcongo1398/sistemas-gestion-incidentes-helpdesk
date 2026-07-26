@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio - Help Desk</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Panel de Control Principal</h1>
+        <nav>
+            <a href="inicio.html">Inicio</a>
+            <a href="reportar.html">Reportar Incidente</a>
+            <a href="tickets.html">Ver Tickets</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="contenedor">
+            <div class="bloque">
+                <h2>Bienvenido al Help Desk</h2>
+                <hr>
+                <h3>Resumen del Sistema</h3>
+                <p>Este sistema permite la gestión eficiente de incidentes técnicos en las áreas de Red, Hardware y Software.</p>
+            </div>
+
+            <div class="bloque">
+                <h2>Estado de Tickets</h2>
+                <hr>
+                <p>Tickets Pendientes: <span id="pendientes">0</span></p>
+                <p>Tickets Resueltos: <span id="resueltos">0</span></p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; Alumno Luis Congo 2026 Universidad Técnica de Manabí - Desarrollo de Sistemas Informáticos.</p>
+    </footer>
+
+    <script>
+        async function cargarResumen() {
+            try {
+                const respuesta = await fetch('http://localhost:3000/tickets');
+                const tickets = await respuesta.json();
+
+                let pendientes = 0;
+                let resueltos = 0;
+
+                tickets.forEach(ticket => {
+                    if(ticket.estado === 'Abierto' || ticket.estado === 'En Progreso'){
+                        pendientes++;
+                    } else {
+                        resueltos++;
+                    }
+                });
+
+                document.getElementById('pendientes').textContent = pendientes;
+                document.getElementById('resueltos').textContent = resueltos;
+
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        cargarResumen();
+    </script>
+</body>
+</html>
