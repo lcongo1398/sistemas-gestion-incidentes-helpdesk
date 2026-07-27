@@ -1,14 +1,14 @@
 const { Sequelize } = require('sequelize');
 
-const sequelize = new Sequelize(
-  'helpdesk_db',        // Nombre de la base (puedes crearla antes en pgAdmin)
-  'postgres',           // Tu usuario de PostgreSQL
-  '1718411398Lc',      // Tu contraseña de PostgreSQL
-  {
-    host: 'localhost',
-    dialect: 'postgres',
-    logging: false
+const sequelize = new Sequelize('postgresql://postgres:1718411398Lc.wgaqonisyyvujhlqgo.supabase.co:5432/postgres', {
+  dialect: 'postgres',
+  logging: false,
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
+    }
   }
-);
+});
 
 module.exports = sequelize;
