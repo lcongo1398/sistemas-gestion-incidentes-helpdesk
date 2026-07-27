@@ -1,4 +1,4 @@
-const { DataTypes } = require('sequelize');
+ const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
 const Ticket = sequelize.define('Ticket', {
@@ -24,7 +24,8 @@ const Ticket = sequelize.define('Ticket', {
     allowNull: false
   },
   estado: {
-    type: DataTypes.ENUM('Abierto', 'En Progreso', 'Cerrado'),
+    type: DataTypes.ENUM('Abierto', 'En proceso', 'Cerrado'),
+
     defaultValue: 'Abierto'
   }
 }, {

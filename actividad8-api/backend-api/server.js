@@ -9,19 +9,15 @@ const PUERTO = 3000;
 app.use(cors());
 app.use(express.json());
 
-// Conexión a la base
 sequelize.authenticate()
-  .then(() => console.log('✅ CONECTADO A POSTGRESQL'))
-  .catch(err => console.log('❌ ERROR:', err));
+.then(() => console.log('✅ CONECTADO A POSTGRESQL'))
+.catch(err => console.log('❌ ERROR:', err));
 
-// Crear tablas
 sequelize.sync({ force: false })
-  .then(() => console.log('📋 Tablas listas'));
+.then(() => console.log('✅ Tablas listas'));
 
-// Conectar las rutas
 app.use('/tickets', rutasTickets);
 
-// Iniciar servidor
 app.listen(PUERTO, () => {
   console.log(`🚀 Servidor en http://localhost:${PUERTO}`);
 });
