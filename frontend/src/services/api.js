@@ -1,8 +1,10 @@
- import axios from 'axios';
+import axios from 'axios';
 
-// Cuando desplegues el backend, cambia esta URL por la pública
+const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:8080/api';
+
 const api = axios.create({
-  baseURL: 'http://localhost:3000'
+  baseURL,
+  headers: { 'Content-Type': 'application/json' },
 });
 
 export default api;
