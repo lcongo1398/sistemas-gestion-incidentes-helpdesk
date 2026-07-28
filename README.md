@@ -61,6 +61,15 @@ REACT_APP_API_URL=http://localhost:8080/api npm start
 npm run build
 ```
 
+## Desplegar frontend en Vercel
+1. Crea un proyecto en Vercel y conecta tu repositorio GitHub.
+2. En el campo "Root Directory" selecciona `frontend` (importante: el proyecto React está dentro de esta carpeta).
+3. En "Framework Preset" Vercel suele detectar Create React App; si no, selecciona "Create React App".
+4. En "Environment Variables" agrega `REACT_APP_API_URL` con la URL pública de tu backend (ej: `https://mi-backend.example.com/api`).
+5. Deploy. Vercel ejecutará `npm run build` y servirá la carpeta `build`.
+
+> He añadido `frontend/vercel.json` que configura la build para Vercel y enrutamiento SPA.
+
 ## Endpoints principales (backend)
 - GET  /api/tickets         -> listar tickets
 - POST /api/tickets         -> crear ticket

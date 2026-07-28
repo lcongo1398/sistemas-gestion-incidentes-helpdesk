@@ -1,31 +1,31 @@
 import { useState } from 'react';
-import api from '../services/api';
+import { createTicket } from '../services/ticketService';
 import DOMPurify from 'dompurify';
 
 function RegistroTicket() {
   const [form, setForm] = useState({
     titulo: '',
     descripcion: '',
-    categoria: 'Red',       // ✅ VALOR VÁLIDO POR DEFECTO
-    prioridad: 'Media'     // ✅ VALOR VÁLIDO POR DEFECTO
+    categoria: 'Red',
+    prioridad: 'Media'
   });
 
   const cambioCampo = (e) => {
-    setForm({...form, [e.target.name]: e.target.value});
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const enviar = async (e) => {
     e.preventDefault();
-    // ✅ MANTENEMOS TU PROTECCIÓN XSS
     const datosLimpios = {
       titulo: DOMPurify.sanitize(form.titulo),
       descripcion: DOMPurify.sanitize(form.descripcion),
       categoria: DOMPurify.sanitize(form.categoria),
-      prioridad: DOMPurify.sanitize(form.prioridad)
+      prioridad: DOMPurify.sanitize(form.prioridad),
+      estado: 'Abierto'
     };
 
     try {
-      await api.post('/tickets', datosLimpios);
+      await createTicket(datosLimpios);
       alert('✅ Incidente registrado correctamente');
       setForm({ titulo: '', descripcion: '', categoria: 'Red', prioridad: 'Media' });
     } catch (err) {
@@ -38,14 +38,12 @@ function RegistroTicket() {
     <div style={estilos.contenedor}>
       <h1 style={estilos.tituloPagina}>Reportar Nuevo Incidente</h1>
       <form onSubmit={enviar} style={estilos.formulario}>
-        
-        {/* TÍTULO */}
         <div style={estilos.campo}>
           <label style={estilos.etiqueta}>Título del problema:</label>
-          <input 
-            type="text" 
-            name="titulo" 
-            placeholder="Título del problema" 
+          <input
+            type="text"
+            name="titulo"
+            placeholder="Título del problema"
             value={form.titulo}
             onChange={cambioCampo}
             required
@@ -53,12 +51,11 @@ function RegistroTicket() {
           />
         </div>
 
-        {/* DESCRIPCIÓN */}
         <div style={estilos.campo}>
           <label style={estilos.etiqueta}>Descripción detallada:</label>
-          <textarea 
-            name="descripcion" 
-            placeholder="Describe qué sucede..." 
+          <textarea
+            name="descripcion"
+            placeholder="Describe qué sucede..."
             value={form.descripcion}
             onChange={cambioCampo}
             required
@@ -67,32 +64,18 @@ function RegistroTicket() {
           ></textarea>
         </div>
 
-        {/* CATEGORÍA - OPCIONES EXACTAS QUE ACEPTA LA BD */}
         <div style={estilos.campo}>
           <label style={estilos.etiqueta}>Categoría:</label>
-          <select 
-            name="categoria" 
-            value={form.categoria}
-            onChange={cambioCampo}
-            required
-            style={estilos.seleccion}
-          >
+          <select name="categoria" value={form.categoria} onChange={cambioCampo} required style={estilos.seleccion}>
             <option value="Red">Red</option>
             <option value="Hardware">Hardware</option>
             <option value="Software">Software</option>
           </select>
         </div>
 
-        {/* PRIORIDAD - OPCIONES EXACTAS QUE ACEPTA LA BD */}
         <div style={estilos.campo}>
           <label style={estilos.etiqueta}>Prioridad:</label>
-          <select 
-            name="prioridad" 
-            value={form.prioridad}
-            onChange={cambioCampo}
-            required
-            style={estilos.seleccion}
-          >
+          <select name="prioridad" value={form.prioridad} onChange={cambioCampo} required style={estilos.seleccion}>
             <option value="Alta">Alta</option>
             <option value="Media">Media</option>
             <option value="Baja">Baja</option>
@@ -105,7 +88,6 @@ function RegistroTicket() {
   );
 }
 
-// ✅ AQUÍ ESTÁN TUS ESTILOS, LOS DEJAMOS BONITOS Y ORDENADOS
 const estilos = {
   contenedor: {
     padding: '2rem',
@@ -124,48 +106,12 @@ const estilos = {
     borderRadius: '8px',
     boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
   },
-  campo: {
-    marginBottom: '1.5rem'
-  },
-  etiqueta: {
-    display: 'block',
-    marginBottom: '0.5rem',
-    fontWeight: 'bold',
-    color: '#34495e'
-  },
-  entrada: {
-    width: '100%',
-    padding: '0.75rem',
-    border: '1px solid #ddd',
-    borderRadius: '4px',
-    fontSize: '1rem'
-  },
-  areaTexto: {
-    width: '100%',
-    padding: '0.75rem',
-    border: '1px solid #ddd',
-    borderRadius: '4px',
-    fontSize: '1rem',
-    resize: 'vertical'
-  },
-  seleccion: {
-    width: '100%',
-    padding: '0.75rem',
-    border: '1px solid #ddd',
-    borderRadius: '4px',
-    fontSize: '1rem',
-    backgroundColor: 'white'
-  },
-  boton: {
-    backgroundColor: '#3498db',
-    color: 'white',
-    padding: '0.75rem 1.5rem',
-    border: 'none',
-    borderRadius: '4px',
-    fontSize: '1rem',
-    cursor: 'pointer',
-    width: '100%'
-  }
+  campo: { marginBottom: '1.5rem' },
+  etiqueta: { display: 'block', marginBottom: '0.5rem', fontWeight: 'bold', color: '#34495e' },
+  entrada: { width: '100%', padding: '0.75rem', border: '1px solid #ddd', borderRadius: '4px', fontSize: '1rem' },
+  areaTexto: { width: '100%', padding: '0.75rem', border: '1px solid '#ddd', borderRadius: '4px', fontSize: '1rem', resize: 'vertical' },
+  seleccion: { width: '100%', padding: '0.75rem', border: '1px solid #ddd', borderRadius: '4px', fontSize: '1rem', backgroundColor: 'white' },
+  boton: { backgroundColor: '#3498db', color: 'white', padding: '0.75rem 1.5rem', border: 'none', borderRadius: '4px', fontSize: '1rem', cursor: 'pointer', width: '100%' }
 };
 
 export default RegistroTicket;

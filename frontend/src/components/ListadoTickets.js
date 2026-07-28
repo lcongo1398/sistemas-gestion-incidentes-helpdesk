@@ -1,37 +1,76 @@
 import { useState, useEffect } from 'react';
-import api from '../services/api';
+import { listTickets, updateTicket, deleteTicket } from '../services/ticketService';
 import DOMPurify from 'dompurify';
 
 function ListadoTickets() {
   const [tickets, setTickets] = useState([]);
   const [editando, setEditando] = useState(null);
   const [datosEdit, setDatosEdit] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const cargar = () => {
-    api.get('/tickets').then(res => setTickets(res.data));
+  const cargar = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await listTickets();
+      setTickets(data);
+    } catch (err) {
+      console.error(err);
+      setError('Error al cargar tickets');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  useEffect(cargar, []);
+  useEffect(() => {
+    cargar();
+  }, []);
 
   const eliminar = async (id) => {
-    if(window.confirm('¿Eliminar este ticket?')){
-      await api.delete(`/tickets/${id}`);
-      cargar();
+    if (window.confirm('¿Eliminar este ticket?')) {
+      try {
+        await deleteTicket(id);
+        await cargar();
+      } catch (err) {
+        console.error(err);
+        alert('Error al eliminar');
+      }
     }
+  };
+
+  const iniciarEdicion = (t) => {
+    setEditando(t.id);
+    setDatosEdit({
+      titulo: t.titulo || '',
+      descripcion: t.descripcion || '',
+      categoria: t.categoria || 'Red',
+      prioridad: t.prioridad || 'Media',
+      estado: t.estado || 'Abierto'
+    });
   };
 
   const actualizar = async () => {
     const limpio = {
-      titulo: DOMPurify.sanitize(datosEdit.titulo),
-      descripcion: DOMPurify.sanitize(datosEdit.descripcion),
-      categoria: DOMPurify.sanitize(datosEdit.categoria),
-      prioridad: DOMPurify.sanitize(datosEdit.prioridad),
-      estado: DOMPurify.sanitize(datosEdit.estado)
+      titulo: DOMPurify.sanitize(datosEdit.titulo || ''),
+      descripcion: DOMPurify.sanitize(datosEdit.descripcion || ''),
+      categoria: DOMPurify.sanitize(datosEdit.categoria || ''),
+      prioridad: DOMPurify.sanitize(datosEdit.prioridad || ''),
+      estado: DOMPurify.sanitize(datosEdit.estado || '')
     };
-    await api.put(`/tickets/${editando}`, limpio);
-    setEditando(null);
-    cargar();
+
+    try {
+      await updateTicket(editando, limpio);
+      setEditando(null);
+      await cargar();
+    } catch (err) {
+      console.error(err);
+      alert('Error al actualizar');
+    }
   };
+
+  if (loading) return <div style={{ padding: '2rem' }}>Cargando tickets...</div>;
+  if (error) return <div style={{ padding: '2rem', color: 'red' }}>{error}</div>;
 
   return (
     <div style={estilos.contenedor}>
@@ -48,17 +87,21 @@ function ListadoTickets() {
         {tickets.map(t => (
           editando === t.id ? (
             <div key={t.id} style={estilos.fila}>
-              <input defaultValue={t.titulo} onChange={(e)=>setDatosEdit({...datosEdit, titulo:e.target.value})} style={estilos.inputSmall}/>
-              <input defaultValue={t.categoria} onChange={(e)=>setDatosEdit({...datosEdit, categoria:e.target.value})} style={estilos.inputSmall}/>
-              <select defaultValue={t.prioridad} onChange={(e)=>setDatosEdit({...datosEdit, prioridad:e.target.value})} style={estilos.inputSmall}>
-                <option>Baja</option><option>Media</option><option>Alta</option><option>Urgente</option>
+              <input value={datosEdit.titulo} onChange={(e) => setDatosEdit({ ...datosEdit, titulo: e.target.value })} style={estilos.inputSmall} />
+              <input value={datosEdit.categoria} onChange={(e) => setDatosEdit({ ...datosEdit, categoria: e.target.value })} style={estilos.inputSmall} />
+              <select value={datosEdit.prioridad} onChange={(e) => setDatosEdit({ ...datosEdit, prioridad: e.target.value })} style={estilos.inputSmall}>
+                <option value="Baja">Baja</option>
+                <option value="Media">Media</option>
+                <option value="Alta">Alta</option>
               </select>
-              <select defaultValue={t.estado} onChange={(e)=>setDatosEdit({...datosEdit, estado:e.target.value})} style={estilos.inputSmall}>
-                <option>Abierto</option><option>En proceso</option><option>Cerrado</option>
+              <select value={datosEdit.estado} onChange={(e) => setDatosEdit({ ...datosEdit, estado: e.target.value })} style={estilos.inputSmall}>
+                <option value="Abierto">Abierto</option>
+                <option value="En proceso">En proceso</option>
+                <option value="Cerrado">Cerrado</option>
               </select>
               <div style={estilos.acciones}>
-                <button onClick={actualizar} style={{...estilos.btn, background:'#27ae60'}}>Guardar</button>
-                <button onClick={()=>setEditando(null)} style={{...estilos.btn, background:'#95a5a6'}}>Cancelar</button>
+                <button onClick={actualizar} style={{ ...estilos.btn, background: '#27ae60' }}>Guardar</button>
+                <button onClick={() => setEditando(null)} style={{ ...estilos.btn, background: '#95a5a6' }}>Cancelar</button>
               </div>
             </div>
           ) : (
@@ -68,8 +111,8 @@ function ListadoTickets() {
               <div style={estilos.celda}>{t.prioridad}</div>
               <div style={estilos.celda}>{t.estado}</div>
               <div style={estilos.acciones}>
-                <button onClick={()=>{setEditando(t.id); setDatosEdit(t)}} style={{...estilos.btn, background:'#f39c12'}}>Editar</button>
-                <button onClick={()=>eliminar(t.id)} style={{...estilos.btn, background:'#e74c3c'}}>Eliminar</button>
+                <button onClick={() => iniciarEdicion(t)} style={{ ...estilos.btn, background: '#f39c12' }}>Editar</button>
+                <button onClick={() => eliminar(t.id)} style={{ ...estilos.btn, background: '#e74c3c' }}>Eliminar</button>
               </div>
             </div>
           )
@@ -84,7 +127,7 @@ const estilos = {
   tabla: { marginTop: '2rem', borderRadius: '8px', overflow: 'hidden', border: '1px solid #ddd' },
   filaCabecera: { display: 'grid', gridTemplateColumns: '2fr 1.5fr 1fr 1fr 1.5fr', padding: '1rem', background: '#2c3e50', color: 'white', fontWeight: 'bold' },
   fila: { display: 'grid', gridTemplateColumns: '2fr 1.5fr 1fr 1fr 1.5fr', padding: '1rem', borderBottom: '1px solid #eee', alignItems: 'center' },
-  celda: { padding: '0 0.5rem' },
+  celda: { padding: '0 0.5rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
   inputSmall: { padding: '0.4rem', width: '90%', borderRadius: '4px', border: '1px solid #ccc' },
   acciones: { display: 'flex', gap: '0.5rem' },
   btn: { padding: '0.4rem 0.8rem', border: 'none', borderRadius: '4px', color: 'white', cursor: 'pointer' }
