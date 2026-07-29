@@ -5,11 +5,11 @@ const cors = require('cors');
 const { Sequelize } = require('sequelize');
 
 // Importar rutas
-const ticketRoutes = require('./routes/tickets');
+const ticketRoutes = require('./routes/Tickets.js');
 
 const app = express();
 
-// Configuración
+// Configuración  
 app.use(cors());
 app.use(express.json());
 

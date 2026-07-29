@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Ticket = require('../models/Ticket');
+const Ticket = require('../models/Ticket.js');
 
 // GET todos
 router.get('/', async (req, res) => {
