@@ -6,10 +6,10 @@ const { Sequelize } = require('sequelize');
 
 // Importar rutas
 const ticketRoutes = require('./routes/Tickets.js');
-
+const Ticket = require('./models/Ticket.js');
 const app = express();
 
-// Configuración  
+// Configuración
 app.use(cors());
 app.use(express.json());
 
