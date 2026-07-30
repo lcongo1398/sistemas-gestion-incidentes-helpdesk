@@ -17,17 +17,17 @@ export const RegistroIncidentes = ({ onCrear }) => {
     <div className="card">
       <h3>Registrar Incidencia</h3>
       <form onSubmit={handleSubmit}>
-        <input
-          placeholder="Título del Incidente"
-          value={titulo}
-          onChange={(e) => setTitulo(e.target.value)}
-          required
+        <input 
+          placeholder="Título del Incidente" 
+          value={titulo} 
+          onChange={(e) => setTitulo(e.target.value)} 
+          required 
         />
-        <textarea
-          placeholder="Descripción detallada"
-          value={descripcion}
-          onChange={(e) => setDescripcion(e.target.value)}
-          required
+        <textarea 
+          placeholder="Descripción detallada" 
+          value={descripcion} 
+          onChange={(e) => setDescripcion(e.target.value)} 
+          required 
         />
         <select value={prioridad} onChange={(e) => setPrioridad(e.target.value)}>
           <option value="Baja">Prioridad Baja</option>

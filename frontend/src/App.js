@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './App.css';
+import { Navegacion } from './components/Navegacion';
+import { Dashboard } from './components/Dashboard';
+import { RegistroIncidentes } from './components/RegistroIncidentes';
+import { ListadoTickets } from './components/ListadoTickets';
 
-import Navegacion from './components/Navegacion';
-import Dashboard from './components/Dashboard';
-import RegistroTicket from './components/registroTicket'; // 👈 Corregido al nombre real del archivo
-import ListadoTickets from './components/ListadoTickets';
-
+// CAMBIA ESTA URL LUEGO POR LA DE RENDER
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api/tickets';
 
 function App() {
@@ -44,11 +44,11 @@ function App() {
       <div className="container">
         <Dashboard tickets={tickets} />
         <div className="main-layout">
-          <RegistroTickets onCrear={crearTicket} />
-          <ListadoTickets
-            tickets={tickets}
-            onActualizar={actualizarEstado}
-            onEliminar={eliminarTicket}
+          <RegistroIncidentes onCrear={crearTicket} />
+          <ListadoTickets 
+            tickets={tickets} 
+            onActualizar={actualizarEstado} 
+            onEliminar={eliminarTicket} 
           />
         </div>
       </div>

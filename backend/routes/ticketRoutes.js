@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Ticket = require('../models/Ticket');
-const xss = require('xss-clean');
+const xss = require('xss-clean'); // Protección anti-XSS
 
 // Obtener todos los tickets
 router.get('/', async (req, res) => {
@@ -13,17 +13,14 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Crear ticket (Sanitizando entradas para prevenir vulnerabilidades XSS)
+// Crear ticket (Desinfección de variables con xss-clean)
 router.post('/', async (req, res) => {
   try {
-    const { titulo, descripcion, prioridad } = req.body;
-
     const nuevoTicket = new Ticket({
-      titulo: titulo ? titulo.trim() : '',
-      descripcion: descripcion ? descripcion.trim() : '',
-      prioridad: prioridad || 'Media'
+      titulo: req.body.titulo,
+      descripcion: req.body.descripcion,
+      prioridad: req.body.prioridad
     });
-
     const ticketGuardado = await nuevoTicket.save();
     res.status(201).json(ticketGuardado);
   } catch (err) {
@@ -31,18 +28,14 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Actualizar estado del ticket
+// Actualizar estado
 router.put('/:id', async (req, res) => {
   try {
-    const { estado } = req.body;
     const ticketActualizado = await Ticket.findByIdAndUpdate(
       req.params.id,
-      { estado },
+      { estado: req.body.estado },
       { new: true }
     );
-    if (!ticketActualizado) {
-      return res.status(404).json({ error: 'Ticket no encontrado' });
-    }
     res.json(ticketActualizado);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -52,10 +45,7 @@ router.put('/:id', async (req, res) => {
 // Eliminar ticket
 router.delete('/:id', async (req, res) => {
   try {
-    const ticketEliminado = await Ticket.findByIdAndDelete(req.params.id);
-    if (!ticketEliminado) {
-      return res.status(404).json({ error: 'Ticket no encontrado' });
-    }
+    await Ticket.findByIdAndDelete(req.params.id);
     res.json({ mensaje: 'Ticket eliminado correctamente' });
   } catch (err) {
     res.status(400).json({ error: err.message });
