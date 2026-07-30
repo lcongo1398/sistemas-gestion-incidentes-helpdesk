@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './App.css';
-import { Navegacion } from './components/Navegacion';
-import { Dashboard } from './components/Dashboard';
-import { RegistroIncidentes } from './components/RegistroIncidentes';
-import { ListadoTickets } from './components/ListadoTickets';
+
+// 🛠️ Se quitaron las llaves { } de las importaciones para coincidir con export default
+import Navegacion from './components/Navegacion';
+import Dashboard from './components/Dashboard';
+import RegistroIncidentes from './components/RegistroIncidentes';
+import ListadoTickets from './components/ListadoTickets';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api/tickets';
 
